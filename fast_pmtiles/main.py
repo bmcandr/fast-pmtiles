@@ -147,12 +147,17 @@ async def viewer(
 ):
     tilejson = await _get_tilejson(url, request, reader)
 
+    # todo: layer selection?
+    layer = tilejson["vector_layers"][0]
+
     return HTMLResponse(
         templates.get_template("viewer.html").render(
-            id=tilejson["vector_layers"][0]["id"],
+            center=list(tilejson["center"][:2]),
+            zoom=layer["minzoom"],
+            id=layer["id"],
             tiles=tilejson["tiles"],
-            minzoom=tilejson["minzoom"],
-            maxzoom=tilejson["maxzoom"],
+            minzoom=layer["minzoom"],
+            maxzoom=layer["maxzoom"],
         )
     )
 
