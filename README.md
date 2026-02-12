@@ -2,6 +2,12 @@
 
 A simple OGC Tiles API for PMTiles.
 
+Built with:
+
+* [FastAPI](https://github.com/fastapi/fastapi)
+* [async-pmtiles](https://github.com/developmentseed/async-pmtiles)
+* [obstore](https://github.com/developmentseed/obstore)
+
 _Work in progress..._
 
 ## Quickstart
