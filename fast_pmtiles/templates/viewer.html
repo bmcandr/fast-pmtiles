@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CARTO Dark Matter with MapLibre GL JS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Include MapLibre GL JS CSS and JS files -->
+    <link
+      href="https://unpkg.com/maplibre-gl@5.18.0/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/maplibre-gl@5.18.0"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Map container -->
+    <div id="map"></div>
+    <script>
+      // Initialize the map
+      const map = new maplibregl.Map({
+        container: "map", // container id
+        // Specify the CARTO Dark Matter style URL
+        style:
+          "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+        center: [-74.006, 40.7128], // starting position [lng, lat]
+        zoom: 10, // starting zoom
+      });
+
+      map.on("load", () => {
+        map.addSource("features", {
+          type: "vector",
+          tiles: [{% for url in tiles %}"{{url}}"{% endfor %}],
+          minzoom: {{ minzoom }},
+          maxzoom: {{ maxzoom }},
+        });
+        map.addLayer({
+          id: "default",
+          type: "fill",
+          source: "features",
+          interactive: true,
+          "source-layer": "{{ id }}",
+          filter: ["==", ["geometry-type"], "Polygon"],
+          paint: {
+            "fill-color": "orange",
+            "fill-opacity": 0.6,
+            "fill-outline-color": "black",
+          },
+        });
+        map.addLayer({
+          id: "default-stroke",
+          type: "line",
+          source: "features",
+          "source-layer": "{{ id }}",
+          filter: ["==", ["geometry-type"], "LineString"],
+          paint: {
+            "line-color": "limegreen",
+            "line-width": 4,
+          },
+        });
+        map.addLayer({
+          id: "default-circle",
+          type: "circle",
+          source: "features",
+          "source-layer": "{{ id }}",
+          filter: ["==", ["geometry-type"], "Point"],
+          paint: {
+            "circle-color": "magenta",
+            "circle-stroke-color": "black",
+            "circle-stroke-width": 1,
+            "circle-opacity": 0.5,
+            "circle-radius": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              4,
+              0.5, // at zoom 4 → 0.5px
+              8,
+              1,
+              12,
+              2,
+              16,
+              4,
+            ],
+          },
+        });
+      });
+
+      // Add navigation control (optional)
+      map.addControl(new maplibregl.NavigationControl(), "top-right");
+    </script>
+  </body>
+</html>
