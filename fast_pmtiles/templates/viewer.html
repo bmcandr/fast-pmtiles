@@ -34,67 +34,68 @@
       style:
         "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
       center: {{ center }}, // starting position [lng, lat]
-    zoom: {{ zoom }} // starting zoom
-      });
+      zoom: {{ zoom }}, // starting zoom
+    });
 
     map.on("load", () => {
       map.addSource("features", {
         type: "vector",
         tiles: [{% for url in tiles %}"{{url}}"{% endfor %}],
-      minzoom: {{ minzoom }},
-      maxzoom: {{ maxzoom }},
+        minzoom: {{ minzoom }},
+        maxzoom: {{ maxzoom }},
+          attribution: '{{ attribution }}'
         });
-    map.addLayer({
-      id: "default",
-      type: "fill",
-      source: "features",
-      interactive: true,
-      "source-layer": "{{ id }}",
-      filter: ["==", ["geometry-type"], "Polygon"],
-      paint: {
-        "fill-color": "orange",
-        "fill-opacity": 0.6,
-        "fill-outline-color": "black",
-      },
-    });
-    map.addLayer({
-      id: "default-stroke",
-      type: "line",
-      source: "features",
-      "source-layer": "{{ id }}",
-      filter: ["==", ["geometry-type"], "LineString"],
-      paint: {
-        "line-color": "limegreen",
-        "line-width": 4,
-      },
-    });
-    map.addLayer({
-      id: "default-circle",
-      type: "circle",
-      source: "features",
-      "source-layer": "{{ id }}",
-      filter: ["==", ["geometry-type"], "Point"],
-      paint: {
-        "circle-color": "magenta",
-        "circle-stroke-color": "black",
-        "circle-stroke-width": 1,
-        "circle-opacity": 0.5,
-        "circle-radius": [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          4,
-          0.5, // at zoom 4 → 0.5px
-          8,
-          1,
-          12,
-          2,
-          16,
-          4,
-        ],
-      },
-    });
+      map.addLayer({
+        id: "default",
+        type: "fill",
+        source: "features",
+        interactive: true,
+        "source-layer": "{{ id }}",
+        filter: ["==", ["geometry-type"], "Polygon"],
+        paint: {
+          "fill-color": "orange",
+          "fill-opacity": 0.6,
+          "fill-outline-color": "black",
+        },
       });
+      map.addLayer({
+        id: "default-stroke",
+        type: "line",
+        source: "features",
+        "source-layer": "{{ id }}",
+        filter: ["==", ["geometry-type"], "LineString"],
+        paint: {
+          "line-color": "limegreen",
+          "line-width": 4,
+        },
+      });
+      map.addLayer({
+        id: "default-circle",
+        type: "circle",
+        source: "features",
+        "source-layer": "{{ id }}",
+        filter: ["==", ["geometry-type"], "Point"],
+        paint: {
+          "circle-color": "magenta",
+          "circle-stroke-color": "black",
+          "circle-stroke-width": 1,
+          "circle-opacity": 0.5,
+          "circle-radius": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            4,
+            0.5, // at zoom 4 → 0.5px
+            8,
+            1,
+            12,
+            2,
+            16,
+            4,
+          ],
+        },
+      });
+    });
 
     // Add navigation control (optional)
     map.addControl(new maplibregl.NavigationControl(), "top-right");

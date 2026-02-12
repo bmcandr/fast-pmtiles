@@ -158,6 +158,7 @@ async def viewer(
             tiles=tilejson["tiles"],
             minzoom=layer["minzoom"],
             maxzoom=layer["maxzoom"],
+            attribution=tilejson["attribution"],
         )
     )
 
