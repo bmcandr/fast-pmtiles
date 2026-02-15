@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class APISettings(BaseSettings):
-    title: str = "fast-pmtiles: OGC Tiles API from PMTiles Sources"
+    title: str = "fast-pmtiles: XYZ Vector Tiles API for PMTiles"
     cors_origins: str = "*"
     cache_control_str: str = "public, max-age=3600"
     root_path: str = ""

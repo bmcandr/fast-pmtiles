@@ -5,10 +5,12 @@ from urllib.parse import quote, unquote
 from aiohttp import ClientSession
 from async_pmtiles import PMTilesReader
 from cachetools import LRUCache
-from fastapi import Depends, FastAPI, Request, Response, status
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response, status
 from fastapi.concurrency import asynccontextmanager
 from fastapi.responses import HTMLResponse
 from jinja2 import Environment, FileSystemLoader
+from obstore import Bytes
+from obstore.store import from_url
 from starlette.templating import Jinja2Templates
 
 from fast_pmtiles.adapter import AiohttpAdapter
@@ -46,21 +48,35 @@ app.add_middleware(
     cache_control_str=settings.cache_control_str,
 )
 
+URL_PARAM = Query(description="URL-encoded absolute URL of a PMTiles archive")
 
-async def get_reader(url: str, request: Request) -> PMTilesReader:
+
+async def get_reader(
+    request: Request,
+    url: str = URL_PARAM,
+) -> PMTilesReader:
     """Return cached PMTilesReader instance if available, otherwise create."""
     task_cache = request.app.state.get_reader_task_cache
     if task := task_cache.get(url):
         return await task
 
-    async def open_reader():
-        return await PMTilesReader.open(
-            unquote(url),
-            store=request.app.state.store,
-        )
+    async def open_reader(_url: str):
+        match _url:
+            case _url if _url.startswith("http"):
+                return await PMTilesReader.open(
+                    unquote(_url),
+                    store=request.app.state.store,
+                )
+            case _:
+                return await PMTilesReader.open(
+                    "",
+                    store=from_url(
+                        _url,
+                    ),
+                )
 
     # cache future
-    task = asyncio.create_task(open_reader())
+    task = asyncio.create_task(open_reader(url))
     task_cache[url] = task
 
     try:
@@ -113,6 +129,12 @@ async def get_tilejson(
 class TileResponse(Response):
     media_type = "application/vnd.mapbox-vector-tile"
 
+    def render(self, content):
+        if isinstance(content, Bytes):
+            return content
+        else:
+            return content.encode()
+
 
 @app.get(
     "/tiles/{z}/{x}/{y}",
@@ -131,6 +153,10 @@ async def get_tile(
 ):
     """Get tile."""
     tile = await reader.get_tile(x=x, y=y, z=z)
+
+    if tile is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
     return TileResponse(
         tile,
         headers={"Content-Encoding": "gzip"},
@@ -158,7 +184,7 @@ async def viewer(
             tiles=tilejson["tiles"],
             minzoom=layer["minzoom"],
             maxzoom=layer["maxzoom"],
-            attribution=tilejson["attribution"],
+            attribution=tilejson.get("attribution", ""),
         )
     )
 
