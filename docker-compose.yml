@@ -1,0 +1,9 @@
+services:
+  fast-pmtiles:
+    build:
+      context: .
+    ports:
+      - "8080:80"
+    environment:
+      - AWS_REGION=${AWS_REGION:-"us-west-2"}
+      - AWS_SKIP_SIGNATURE=${AWS_SKIP_SIGNATURE:-True}
