@@ -1,7 +1,7 @@
 [project]
 name = "fast-pmtiles"
 version = "0.1.0"
-description = "OGC Tiles API from PMTiles Sources"
+description = "Vector Tile Proxy for PMTiles"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -15,8 +15,18 @@ dependencies = [
 
 
 [dependency-groups]
-dev = ["pre-commit>=4.5.1", "pytest>=9.0.2", "ruff>=0.15.0", "ty>=0.0.16"]
+dev = [
+    "pre-commit>=4.5.1",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "pytest-recording>=0.13.4",
+    "ruff>=0.15.0",
+    "ty>=0.0.16",
+]
 
 [tool.ruff]
 extend-select = ["UP"]
 target-version = "py313"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
