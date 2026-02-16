@@ -10,7 +10,6 @@ from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response, s
 from fastapi.concurrency import asynccontextmanager
 from fastapi.responses import HTMLResponse
 from jinja2 import Environment, FileSystemLoader
-from obstore import Bytes
 from obstore.store import from_url
 from starlette.templating import Jinja2Templates
 
@@ -131,10 +130,7 @@ class TileResponse(Response):
     media_type = "application/vnd.mapbox-vector-tile"
 
     def render(self, content):
-        if isinstance(content, Bytes):
-            return content
-        else:
-            return content.encode()
+        return content
 
 
 @app.get(
