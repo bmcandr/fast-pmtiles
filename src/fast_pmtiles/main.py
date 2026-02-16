@@ -1,4 +1,5 @@
 import asyncio
+from asyncio.tasks import Task
 from pathlib import Path
 from urllib.parse import quote, unquote
 
@@ -60,7 +61,7 @@ async def get_reader(
     if task := task_cache.get(url):
         return await task
 
-    async def open_reader(_url: str):
+    async def open_reader(_url: str) -> PMTilesReader:
         match _url:
             case _url if _url.startswith("http"):
                 return await PMTilesReader.open(
@@ -76,7 +77,7 @@ async def get_reader(
                 )
 
     # cache future
-    task = asyncio.create_task(open_reader(url))
+    task: Task[PMTilesReader] = asyncio.create_task(open_reader(url))
     task_cache[url] = task
 
     try:
