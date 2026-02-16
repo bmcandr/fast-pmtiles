@@ -3,7 +3,7 @@ name = "fast-pmtiles"
 version = "0.1.0"
 description = "Vector Tile Proxy for PMTiles"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.11"
 dependencies = [
     "aiohttp>=3.13.3",
     "async-pmtiles>=0.1.0",
