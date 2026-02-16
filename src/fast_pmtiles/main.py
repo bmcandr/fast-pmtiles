@@ -115,6 +115,7 @@ async def _get_tilejson(
 
 @app.get(
     "/tilejson.json",
+    tags=["tiles"],
     operation_id="getTilejson",
 )
 async def get_tilejson(
@@ -135,6 +136,7 @@ class TileResponse(Response):
 
 @app.get(
     "/tiles/{z}/{x}/{y}",
+    tags=["tiles"],
     status_code=status.HTTP_200_OK,
     response_class=TileResponse,
     operation_id="getTile",
@@ -160,7 +162,12 @@ async def get_tile(
     )
 
 
-@app.get("/viewer")
+@app.get(
+    "/viewer",
+    tags=["viewer"],
+    response_class=HTMLResponse,
+    operation_id="viewer",
+)
 async def viewer(
     url: str,
     request: Request,
@@ -168,6 +175,7 @@ async def viewer(
         get_reader,
     ),
 ):
+    """Simple viewer."""
     tilejson = await _get_tilejson(url, request, reader)
 
     # todo: layer selection?
