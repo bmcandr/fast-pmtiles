@@ -81,10 +81,13 @@ async def get_reader(
 
     try:
         return await task
-    except Exception:
+    except Exception as e:
         # invalidate
         task_cache.pop(url, None)
-        raise
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error reading source. Check source URL and/or authentication.\n{e}",
+        )
 
 
 async def _get_tilejson(

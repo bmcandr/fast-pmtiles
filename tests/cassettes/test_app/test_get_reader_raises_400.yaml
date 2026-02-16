@@ -1,0 +1,30 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Range:
+      - bytes=0-126
+    method: GET
+    uri: https://overturemaps-tiles-us-west-2-beta.s3.amazonaws.com/2026-01-21/nonsense.pmtiles
+  response:
+    body:
+      string: '<?xml version="1.0" encoding="UTF-8"?>
+
+        <Error><Code>NoSuchKey</Code><Message>The specified key does not exist.</Message><Key>2026-01-21/nonsense.pmtiles</Key><RequestId>DP48MD7GMHPN5HH1</RequestId><HostId>TmEi2DRU3V7B0EAMvUVp9BOktgK63hNs3DX+RZRmlDpyl/wC3k92NzDmxuVhoTCKzFwDw5PjDEU=</HostId></Error>'
+    headers:
+      Content-Type:
+      - application/xml
+      Date:
+      - Mon, 16 Feb 2026 04:44:43 GMT
+      Server:
+      - AmazonS3
+      Transfer-Encoding:
+      - chunked
+      x-amz-id-2:
+      - TmEi2DRU3V7B0EAMvUVp9BOktgK63hNs3DX+RZRmlDpyl/wC3k92NzDmxuVhoTCKzFwDw5PjDEU=
+      x-amz-request-id:
+      - DP48MD7GMHPN5HH1
+    status:
+      code: 404
+      message: Not Found
+version: 1

@@ -61,12 +61,21 @@ def test_get_tile_404():
         app.dependency_overrides.clear()
 
 
+@pytest.mark.vcr()
 def test_get_reader_cache(http_url):
     with TestClient(app) as client:
         route = f"/tilejson.json?url={http_url}"
         for _ in range(2):
             r = client.get(route)
             assert r.status_code == 200
+
+
+@pytest.mark.vcr()
+def test_get_reader_raises_400(http_url):
+    with TestClient(app) as client:
+        route = f"/tilejson.json?url={http_url}".replace("places", "nonsense")
+        r = client.get(route)
+        assert r.status_code == 400
 
 
 def test_healthcheck():
