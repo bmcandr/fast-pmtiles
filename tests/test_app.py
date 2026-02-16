@@ -58,6 +58,15 @@ def test_get_tile_404():
         app.dependency_overrides[get_reader] = get_mock_reader
         r = client.get(f"/tiles/0/0/0?url={http_url}")
         assert r.status_code == 404
+        app.dependency_overrides.clear()
+
+
+def test_get_reader_cache(http_url):
+    with TestClient(app) as client:
+        route = f"/tilejson.json?url={http_url}"
+        for _ in range(2):
+            r = client.get(route)
+            assert r.status_code == 200
 
 
 def test_healthcheck():
