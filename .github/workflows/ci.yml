@@ -33,7 +33,6 @@ jobs:
         version: "latest"
 
     - name: Run pytest
-      run: uv run pytest \
-        --cov \
+      run: uv run pytest --cov \
         --cov-report="xml:coverage-${{ matrix.python-version }}.xml" \
         --cov-report=term-missing
