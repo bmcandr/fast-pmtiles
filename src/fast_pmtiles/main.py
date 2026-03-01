@@ -1,6 +1,7 @@
 import asyncio
 from asyncio.tasks import Task
 from pathlib import Path
+from typing import Any
 from urllib.parse import quote, unquote
 
 from aiohttp import ClientSession
@@ -86,7 +87,9 @@ async def get_reader(
         task_cache.pop(url, None)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Error reading source. Check source URL and/or authentication.\n{e}",
+            detail=(
+                f"Error reading source. Check source URL and/or authentication.\n{e}"
+            ),
         )
 
 
@@ -94,7 +97,7 @@ async def _get_tilejson(
     url: str,
     request: Request,
     reader: PMTilesReader = Depends(get_reader),
-):
+) -> dict[str, Any]:
     tiles_url = (
         request.url_for(
             "get_tile",
