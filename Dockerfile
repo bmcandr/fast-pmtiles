@@ -1,11 +1,14 @@
-FROM ghcr.io/astral-sh/uv:python3.12-trixie-slim
+FROM ghcr.io/astral-sh/uv:python3.13-trixie-slim
+
+COPY . /app
+
+# Disable development dependencies
+ENV UV_NO_DEV=1
 
 WORKDIR /app
 
-COPY pyproject.toml .
-COPY uv.lock .
 RUN uv sync --frozen --no-cache
 
-COPY ./ .
+ENV PATH="/app/.venv/bin:$PATH"
 
-CMD [".venv/bin/fastapi", "run", "src/fast_pmtiles/main.py", "--port", "80", "--host", "0.0.0.0"]
+CMD ["fastapi", "run", "src/fast_pmtiles/main.py", "--port", "80", "--host", "0.0.0.0"]
