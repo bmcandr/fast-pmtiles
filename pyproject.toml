@@ -1,6 +1,6 @@
 [project]
 name = "fast-pmtiles"
-version = "0.1.0"
+version = "0.1.1"
 description = "Vector Tile Proxy for PMTiles"
 authors = [
     { name = "Brendan McAndrew", email = "19274445+bmcandr@users.noreply.github.com" },
