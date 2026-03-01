@@ -2,8 +2,28 @@
 name = "fast-pmtiles"
 version = "0.1.0"
 description = "Vector Tile Proxy for PMTiles"
+authors = [
+    { name = "Brendan McAndrew", email = "19274445+bmcandr@users.noreply.github.com" },
+]
+urls = { Source = "https://github.com/bmcandr/fast-pmtiles" }
 readme = "README.md"
 requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Framework :: FastAPI",
+]
+
 dependencies = [
     "aiohttp>=3.13.3",
     "async-pmtiles>=0.1.0",
@@ -12,7 +32,6 @@ dependencies = [
     "jinja2>=3.1.6",
     "obstore>=0.8.2",
 ]
-
 
 [dependency-groups]
 dev = [
