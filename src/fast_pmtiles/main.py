@@ -14,6 +14,7 @@ from jinja2 import Environment, FileSystemLoader
 from obstore.store import from_url
 from starlette.templating import Jinja2Templates
 
+from fast_pmtiles import __version__
 from fast_pmtiles.adapter import AiohttpAdapter
 from fast_pmtiles.middleware import CacheControlMiddleware, RequestTimingMiddleware
 from fast_pmtiles.settings import APISettings
@@ -39,6 +40,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.title,
     description="Vector tile server for PMTiles sources.",
+    version=__version__,
     lifespan=lifespan,
     root_path=settings.root_path,
 )
