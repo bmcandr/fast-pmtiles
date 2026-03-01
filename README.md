@@ -86,6 +86,12 @@ See `.env.example`. Settings are defined in [settings.py](src/fast_pmtiles/setti
    pre-commit install
    ```
 
+4. Run the server in development mode:
+
+   ```bash
+   fastapi dev src/fast_pmtiles/main.py
+   ```
+
 ### Running Tests
 
 ```bash
