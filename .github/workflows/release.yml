@@ -8,7 +8,13 @@ on:
 jobs:
   release:
     name: release
+    environment:
+      name: release
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
     if: ${{ github.repository == 'bmcandr/fast-pmtiles' }}
     steps:
       - uses: actions/checkout@v4
@@ -19,7 +25,5 @@ jobs:
       - name: Build
         run: uv build
 
-      - name: Publish
+      - name: Publish to PyPI
         run: uv publish
-        env:
-          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
